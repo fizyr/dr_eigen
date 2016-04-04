@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package format="2">
+	<name>dr_eigen</name>
+	<version>0.0.0</version>
+	<description>The dr_eigen package</description>
+	<license>all-rights-reserved</license>
+
+	<maintainer email="maarten@de-vri.es">Maarten de Vries</maintainer>
+	<author email="maarten@de-vri.es">Maarten de Vries</author>
+
+	<buildtool_depend>catkin</buildtool_depend>
+	<depend>dr_base</depend>
+	<depend>dr_param</depend>
+	<depend>roscpp</depend>
+	<depend>geometry_msgs</depend>
+</package>
