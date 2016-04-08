@@ -1,9 +1,11 @@
 #pragma once
 
+#include <ros/ros.h>
+
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
 
-#include <ros/ros.h>
+#include <algorithm>
 
 namespace dr {
 
@@ -94,6 +96,25 @@ namespace dr {
 	/// Create a rotation around the Z axis with a given angle and center of rotation.
 	inline Eigen::Isometry3d rotateZ(double angle, Eigen::Vector3d const & pivot_point) {
 		return dr::rotate(angle, axes::z(), pivot_point);
+	}
+
+	/// Convert rpy to quaternions. Convention here is z-y-x.
+	inline Eigen::Quaterniond rpyToQuaternion(double r, double p, double y) {
+		return rotateZ(y) * rotateY(p) * rotateX(r);
+	}
+
+	/// Convert rpy to quaternions. Convention here is z-y-x.
+	inline Eigen::Quaterniond rpyToQuaternion(Eigen::Vector3d const & rpy) {
+		return rpyToQuaternion(rpy[0], rpy[1], rpy[2]);
+	}
+
+	/// Convert a quaternion to rpy. Convention here is z-y-x.
+	inline Eigen::Vector3d quaternionToRpy(Eigen::Quaterniond const & quaternion) {
+		Eigen::Vector3d rpy = quaternion.matrix().eulerAngles(2, 1, 0);
+
+		std::swap(rpy[0], rpy[2]);
+
+		return rpy;
 	}
 
 	/// Project vector a onto b.
