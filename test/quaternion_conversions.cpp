@@ -28,6 +28,9 @@ void rpyAssertNear(const Eigen::Vector3d & real_rpy, const Eigen::Vector3d & con
 void testConversion(const Eigen::Quaterniond & quaternion, const Eigen::Vector3d & rpy) {
 	quaternionAssertNear(quaternion, rpyToQuaternion(rpy));
 	rpyAssertNear(rpy, quaternionToRpy(quaternion));
+
+	quaternionAssertNear(quaternion, rpyToQuaternion(quaternionToRpy(quaternion)));
+	rpyAssertNear(rpy, quaternionToRpy(rpyToQuaternion(rpy)));
 }
 
 void testConversion(const Eigen::AngleAxisd & quaternion, const Eigen::Vector3d & rpy) {
