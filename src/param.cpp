@@ -16,21 +16,32 @@ template<> Eigen::Vector3d fromXmlRpc<Eigen::Vector3d>(XmlRpc::XmlRpcValue const
 
 template<> Eigen::Quaterniond fromXmlRpc<Eigen::Quaterniond>(XmlRpc::XmlRpcValue const & value) {
 	ensureXmlRpcType(value, XmlRpc::XmlRpcValue::TypeStruct, "Eigen::Quaterniond");
-	if (value.size() != 4) throw std::runtime_error("wrong number of components for Eigen::Quaterniond: " + std::to_string(value.size()) + " (expected 4)");
 
-	return {
-		fromXmlRpc<double>(xmlRpcAt(value, "w")),
-		fromXmlRpc<double>(xmlRpcAt(value, "x")),
-		fromXmlRpc<double>(xmlRpcAt(value, "y")),
-		fromXmlRpc<double>(xmlRpcAt(value, "z")),
-	};
+	// If orientation is in rpy, convert to quaternion first.
+	// Convention here is x-z-y.
+	if (value.size() == 3) {
+		double r =fromXmlRpc<double>(xmlRpcAt(value, "r"));
+		double p =fromXmlRpc<double>(xmlRpcAt(value, "p"));
+		double y =fromXmlRpc<double>(xmlRpcAt(value, "y"));
+
+		return rpyToQuaternion(r, p, y);
+	} else if (value.size() == 4) {
+		return {
+			fromXmlRpc<double>(xmlRpcAt(value, "w")),
+			fromXmlRpc<double>(xmlRpcAt(value, "x")),
+			fromXmlRpc<double>(xmlRpcAt(value, "y")),
+			fromXmlRpc<double>(xmlRpcAt(value, "z")),
+		};
+	} else throw std::runtime_error("wrong number of components for Eigen::Quaterniond: " + std::to_string(value.size()) + " (expected 3 or 4)");
 }
 
 template<> Eigen::Isometry3d fromXmlRpc<Eigen::Isometry3d>(XmlRpc::XmlRpcValue const & value) {
 	ensureXmlRpcType(value, XmlRpc::XmlRpcValue::TypeStruct, "Eigen::Isometry3d");
 	if (value.size() != 2) throw std::runtime_error("wrong number of components for Eigen::Isometry3d: " + std::to_string(value.size()) + " (expected 2)");
+	// If orientation is in quaternion, just load it in like that.
 
-	return Eigen::Translation3d(fromXmlRpc<Eigen::Vector3d>(xmlRpcAt(value, "position"))) * fromXmlRpc<Eigen::Quaterniond>(xmlRpcAt(value, "orientation"));
+	return Eigen::Translation3d(fromXmlRpc<Eigen::Vector3d>(xmlRpcAt(value, "position"))) * Eigen::Quaterniond(fromXmlRpc<Eigen::Quaterniond>(xmlRpcAt(value, "orientation")));
+
 }
 
 template<> Eigen::AlignedBox3d fromXmlRpc<Eigen::AlignedBox3d>(XmlRpc::XmlRpcValue const & value) {
