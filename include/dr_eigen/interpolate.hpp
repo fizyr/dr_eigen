@@ -69,8 +69,8 @@ Eigen::Isometry3d interpolateIsometry(
 	Eigen::Isometry3d const & b, ///< The second isometry.
 	double factor                ///< The interpolation factor.
 ) {
-	return interpolateRotation(Eigen::Quaterniond{a.rotation()}, Eigen::Quaterniond{b.rotation()}, factor)
-		* Eigen::Translation3d{interpolateVector(a.translation(), b.translation(), factor)};
+	return Eigen::Translation3d{interpolateVector(a.translation(), b.translation(), factor)}
+		* interpolateRotation(Eigen::Quaterniond{a.rotation()}, Eigen::Quaterniond{b.rotation()}, factor);
 }
 
 }
