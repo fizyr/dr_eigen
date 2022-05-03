@@ -3,7 +3,7 @@
 	<name>dr_eigen</name>
 	<version>0.0.0</version>
 	<description>The dr_eigen package</description>
-	<license>all-rights-reserved</license>
+	<license>Apache-2.0</license>
 
 	<maintainer email="maarten@de-vri.es">Maarten de Vries</maintainer>
 	<author email="maarten@de-vri.es">Maarten de Vries</author>
