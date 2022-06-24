@@ -1,3 +1,5 @@
+// Copyright 2014-2022, Fizyr B.V.
+
 #include "param.hpp"
 #include "eigen.hpp"
 

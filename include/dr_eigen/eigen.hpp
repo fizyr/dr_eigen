@@ -1,5 +1,6 @@
-#pragma once
+// Copyright 2014-2022, Fizyr B.V.
 
+#pragma once
 #include <ros/ros.h>
 
 #include <Eigen/Dense>

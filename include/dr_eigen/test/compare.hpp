@@ -1,3 +1,6 @@
+// Copyright 2014-2022, Fizyr B.V.
+
+#pragma once
 #include <string>
 #include <Eigen/Dense>
 
